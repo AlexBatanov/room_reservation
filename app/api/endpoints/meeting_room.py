@@ -1,7 +1,5 @@
 # app/api/meeting_room.py
-from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import and_, select
+from fastapi import APIRouter, Depends
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,12 +7,11 @@ from app.core.db import get_async_session
 # Вместо импортов 6 функций импортируйте объект meeting_room_crud.
 from app.crud.meeting_room import meeting_room_crud
 from app.crud.reservation import reservation_crud
-from app.models.meeting_room import MeetingRoom
-from app.models.reservation import Reservation
 from app.schemas.meeting_room import (
     MeetingRoomCreate, MeetingRoomDB, MeetingRoomUpdate
 )
 from app.api.validators import check_name_duplicate, check_meeting_room_exists
+from app.schemas.reservation import ReservationDB
 
 router = APIRouter()
 
