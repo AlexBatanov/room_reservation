@@ -1,14 +1,14 @@
-# from pydantic_settings import BaseSettings
+# app/core/config.py 
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
     app_title: str = 'Бронирование переговорок'
-    description: str = 'Произвольное описание'
     database_url: str
+    secret: str = 'SECRET'
 
     class Config:
         env_file = '.env'
 
 
-settings = Settings() 
+settings = Settings()
