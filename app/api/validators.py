@@ -6,6 +6,7 @@ from app.crud.meeting_room import meeting_room_crud
 from app.models.meeting_room import MeetingRoom
 from app.models.reservation import Reservation
 from app.crud.reservation import reservation_crud
+from app.models import User
 
 
 async def check_name_duplicate(
@@ -46,7 +47,8 @@ async def check_reservation_intersections(**kwargs) -> None:
 
 async def check_reservation_before_edit(
     reservation_id: int,
-    session: AsyncSession
+    session: AsyncSession,
+    user: User
 ) -> Reservation:
     reservation = await reservation_crud.get(reservation_id, session)
     if not reservation:
@@ -54,4 +56,14 @@ async def check_reservation_before_edit(
             status_code=404,
             detail='Бронь не найдена!'
         )
+
+    if (
+        reservation_id != user.id
+        and not user.is_superuser
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail='Невозможно редактировать или удалить чужую бронь!'
+        )
+
     return reservation

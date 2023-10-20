@@ -5,10 +5,11 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import and_, select
+from sqlalchemy import and_, between, func, or_, select 
 
 from app.crud.base import CRUDBase
 from app.models.reservation import Reservation
+from app.models import User
 
 
 # Новый класс должен быть унаследован от CRUDBase.
@@ -48,7 +49,7 @@ class CRUDReservation(CRUDBase):
         reservations = await session.execute(
             # Получить все объекты Reservation.
             select(Reservation).where(
-                # Где внешний ключ meetingroom_id 
+                # Где внешний ключ meetingroom_id
                 # равен id запрашиваемой переговорки.
                 Reservation.meetingroom_id == room_id,
                 # А время конца бронирования больше текущего времени.
@@ -58,6 +59,28 @@ class CRUDReservation(CRUDBase):
         reservations = reservations.scalars().all()
         return reservations
 
+    async def get_by_user(self, session: AsyncSession, user: User):
+        reservations = await session.execute(
+            select(Reservation).where(Reservation.user_id == user.id)
+        )
+        return reservations.scalars().all()
+
+    async def get_count_res_at_the_same_time(
+            self,
+            from_reserve: datetime,
+            to_reserve: datetime,
+            session: AsyncSession,
+    ) -> list[dict[str, int]]:
+        reservations = await session.execute(
+            # Получаем количество бронирований переговорок за период
+            select([Reservation.meetingroom_id,
+                    func.count(Reservation.meetingroom_id)]).where(
+                Reservation.from_reserve >= from_reserve,
+                Reservation.to_reserve <= to_reserve
+            ).group_by(Reservation.meetingroom_id)
+        )
+        reservations = reservations.all()
+        return reservations
 
 # Создаём объекта класса CRUDReservation.
 reservation_crud = CRUDReservation(Reservation)

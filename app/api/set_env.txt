@@ -1,0 +1,15 @@
+APP_TITLE=Сервис бронирования переговорных комнат
+DESCRIPTION=Описание проекта
+DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
+SECRET=secretword
+TYPE="service_account"
+PROJECT_ID="rapid-rite-402312"
+PRIVATE_KEY_ID="0d1090b29e2cd4783ffdd1ece53b3ace61c08af9"
+PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwg>"
+CLIENT_EMAIL="practicum@rapid-rite-402312.iam.gserviceaccount.com"
+CLIENT_ID="110824457960941266109"
+AUTH_URI="https://accounts.google.com/o/oauth2/auth"
+TOKEN_URI="https://oauth2.googleapis.com/token"
+AUTH_PROVIDER_X509_CERT_URL="https://www.googleapis.com/oauth2/v1/certs"
+CLIENT_X509_CERT_URL="https://www.googleapis.com/robot/v1/metadata/x509/practic>"
+EMAIL="aleksandrbatanov47@gmail.com"
